@@ -1,0 +1,16 @@
+{
+  "name": "generic_jsonl",
+  "layer": "wire",
+  "provider": "generic",
+  "stream_format": "jsonl",
+  "chunks": [
+    "{\"message\":{\"role\":\"assistant\",\"content\":\"First sentence here. Second\"},\"done\":false}\n",
+    "{\"message\":{\"role\":\"assistant\",\"content\":\" one.\",\"done\":true},\"done\":true}\n"
+  ],
+  "expected_events": [
+    { "type": "delta", "text": "First sentence here. Second" },
+    { "type": "delta", "text": " one." },
+    { "type": "metadata", "provider": "generic", "finish_reason": "stop" },
+    { "type": "done" }
+  ]
+}

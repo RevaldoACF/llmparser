@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1000" height="560" fill="#0d1117"/>
+  <text x="500" y="36" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="bold">Provider auto-detection</text>
+  <text x="500" y="60" text-anchor="middle" fill="#8b949e" font-size="14">The first readable JSON chunk is inspected once, and the matching adapter is locked in</text>
+
+  <!-- main line -->
+  <g stroke="#30363d" stroke-width="2" fill="none">
+    <line x1="250" y1="118" x2="250" y2="146"/>
+    <line x1="250" y1="202" x2="250" y2="230"/>
+    <line x1="250" y1="286" x2="250" y2="314"/>
+    <line x1="250" y1="370" x2="250" y2="398"/>
+    <line x1="250" y1="454" x2="250" y2="482"/>
+  </g>
+  <g fill="#8b949e">
+    <polygon points="250,150 244,138 256,138"/>
+    <polygon points="250,234 244,222 256,222"/>
+    <polygon points="250,318 244,306 256,306"/>
+    <polygon points="250,402 244,390 256,390"/>
+    <polygon points="250,486 244,474 256,474"/>
+  </g>
+
+  <!-- start -->
+  <rect x="150" y="82" width="200" height="44" rx="22" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+  <text x="250" y="109" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="bold">first JSON chunk</text>
+
+  <!-- D1 -->
+  <polygon points="250,152 400,196 250,240 100,196" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="250" y="192" text-anchor="middle" fill="#e6edf3" font-size="13">has a candidates[] array?</text>
+  <text x="250" y="208" text-anchor="middle" fill="#6e7681" font-size="10">Google Gemini style</text>
+
+  <!-- D2 -->
+  <polygon points="250,236 400,280 250,324 100,280" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="250" y="276" text-anchor="middle" fill="#e6edf3" font-size="13">type is an Anthropic event?</text>
+  <text x="250" y="292" text-anchor="middle" fill="#6e7681" font-size="10">message_start, content_block_delta, ...</text>
+
+  <!-- D3 -->
+  <polygon points="250,320 400,364 250,408 100,364" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="250" y="360" text-anchor="middle" fill="#e6edf3" font-size="13">has an x_groq field?</text>
+  <text x="250" y="376" text-anchor="middle" fill="#6e7681" font-size="10">Groq style</text>
+
+  <!-- D4 -->
+  <polygon points="250,404 400,448 250,492 100,448" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="250" y="444" text-anchor="middle" fill="#e6edf3" font-size="13">has choices[].delta or</text>
+  <text x="250" y="460" text-anchor="middle" fill="#e6edf3" font-size="13">chat.completion.chunk?</text>
+  <text x="250" y="476" text-anchor="middle" fill="#6e7681" font-size="10">OpenAI style (also OpenRouter, vLLM, ...)</text>
+
+  <!-- D5 -->
+  <rect x="150" y="488" width="200" height="52" rx="26" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="250" y="512" text-anchor="middle" fill="#e6edf3" font-size="13">nothing matched</text>
+  <text x="250" y="530" text-anchor="middle" fill="#6e7681" font-size="10">use text paths to find the text</text>
+
+  <!-- yes/no labels -->
+  <g fill="#8b949e" font-size="12">
+    <text x="408" y="190">yes</text>
+    <text x="260" y="226">no</text>
+    <text x="408" y="274">yes</text>
+    <text x="260" y="310">no</text>
+    <text x="408" y="358">yes</text>
+    <text x="260" y="394">no</text>
+    <text x="408" y="442">yes</text>
+    <text x="260" y="478">no</text>
+  </g>
+
+  <!-- result boxes -->
+  <g>
+    <rect x="620" y="168" width="300" height="56" rx="10" fill="#161b22" stroke="#bc8cff" stroke-width="2.5"/>
+    <text x="770" y="192" text-anchor="middle" fill="#bc8cff" font-size="16" font-weight="bold">gemini</text>
+    <text x="770" y="212" text-anchor="middle" fill="#8b949e" font-size="12">thought text becomes reasoning</text>
+  </g>
+  <g>
+    <rect x="620" y="252" width="300" height="56" rx="10" fill="#161b22" stroke="#e3b341" stroke-width="2.5"/>
+    <text x="770" y="276" text-anchor="middle" fill="#e3b341" font-size="16" font-weight="bold">anthropic</text>
+    <text x="770" y="296" text-anchor="middle" fill="#8b949e" font-size="12">tool_use blocks become tool calls</text>
+  </g>
+  <g>
+    <rect x="620" y="336" width="300" height="56" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="2.5"/>
+    <text x="770" y="360" text-anchor="middle" fill="#3fb950" font-size="16" font-weight="bold">groq</text>
+    <text x="770" y="380" text-anchor="middle" fill="#8b949e" font-size="12">OpenAI wire, usage included</text>
+  </g>
+  <g>
+    <rect x="620" y="420" width="300" height="56" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="2.5"/>
+    <text x="770" y="444" text-anchor="middle" fill="#58a6ff" font-size="16" font-weight="bold">openai</text>
+    <text x="770" y="464" text-anchor="middle" fill="#8b949e" font-size="12">the most common shape</text>
+  </g>
+  <g>
+    <rect x="620" y="504" width="300" height="56" rx="10" fill="#161b22" stroke="#8b949e" stroke-width="2.5"/>
+    <text x="770" y="528" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="bold">generic</text>
+    <text x="770" y="548" text-anchor="middle" fill="#8b949e" font-size="12">Ollama, custom APIs, anything else</text>
+  </g>
+
+  <!-- branch arrows -->
+  <g stroke="#30363d" stroke-width="2" fill="none">
+    <line x1="400" y1="196" x2="616" y2="196"/>
+    <line x1="400" y1="280" x2="616" y2="280"/>
+    <line x1="400" y1="364" x2="616" y2="364"/>
+    <line x1="400" y1="448" x2="616" y2="448"/>
+    <line x1="350" y1="514" x2="616" y2="532"/>
+  </g>
+  <g fill="#8b949e">
+    <polygon points="620,196 608,190 608,202"/>
+    <polygon points="620,280 608,274 608,286"/>
+    <polygon points="620,364 608,358 608,370"/>
+    <polygon points="620,448 608,442 608,454"/>
+    <polygon points="620,533 608,527 612,539"/>
+  </g>
+</svg>

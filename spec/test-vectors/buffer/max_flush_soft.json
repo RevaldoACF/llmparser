@@ -1,0 +1,12 @@
+{
+  "name": "max_flush_soft_boundary",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10, "max_buffer_size": 40 },
+  "input": {
+    "tokens": ["aaaaaaaaaa, ", "bbbbbbbbbb, ", "cccccccccc", " ddddddddd"]
+  },
+  "expected_sentences": [
+    "aaaaaaaaaa, bbbbbbbbbb,",
+    "cccccccccc ddddddddd"
+  ]
+}

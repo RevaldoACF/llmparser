@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="360" viewBox="0 0 1000 360" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1000" height="360" fill="#0d1117"/>
+  <text x="500" y="40" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="bold">How llmstream works</text>
+  <text x="500" y="64" text-anchor="middle" fill="#8b949e" font-size="14">Raw LLM stream in, clean complete sentences out</text>
+
+  <!-- arrows (drawn first, boxes on top) -->
+  <g stroke="#30363d" stroke-width="2">
+    <line x1="192" y1="170" x2="228" y2="170"/>
+    <line x1="402" y1="170" x2="438" y2="170"/>
+    <line x1="612" y1="170" x2="648" y2="170"/>
+    <line x1="822" y1="170" x2="858" y2="170"/>
+  </g>
+  <g fill="#8b949e">
+    <polygon points="232,170 220,164 220,176"/>
+    <polygon points="442,170 430,164 430,176"/>
+    <polygon points="652,170 640,164 640,176"/>
+    <polygon points="862,170 850,164 850,176"/>
+  </g>
+
+  <!-- box 1 -->
+  <rect x="20" y="110" width="172" height="120" rx="10" fill="#161b22" stroke="#f0883e" stroke-width="2"/>
+  <text x="106" y="140" text-anchor="middle" fill="#f0883e" font-size="15" font-weight="bold">1. Raw stream</text>
+  <text x="106" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">bytes from the API</text>
+  <text x="106" y="186" text-anchor="middle" fill="#8b949e" font-size="11">OpenAI, Anthropic,</text>
+  <text x="106" y="202" text-anchor="middle" fill="#8b949e" font-size="11">Gemini, Groq, Ollama</text>
+  <text x="106" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">data: { ... }</text>
+
+  <!-- box 2 -->
+  <rect x="232" y="110" width="170" height="120" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="317" y="140" text-anchor="middle" fill="#58a6ff" font-size="15" font-weight="bold">2. Wire decoder</text>
+  <text x="317" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">SSE or JSON Lines</text>
+  <text x="317" y="186" text-anchor="middle" fill="#8b949e" font-size="11">handles chunks split</text>
+  <text x="317" y="202" text-anchor="middle" fill="#8b949e" font-size="11">in the middle of a word</text>
+  <text x="317" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">{ ... } valid JSON</text>
+
+  <!-- box 3 -->
+  <rect x="442" y="110" width="170" height="120" rx="10" fill="#161b22" stroke="#bc8cff" stroke-width="2"/>
+  <text x="527" y="140" text-anchor="middle" fill="#bc8cff" font-size="15" font-weight="bold">3. Provider adapter</text>
+  <text x="527" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">one event format</text>
+  <text x="527" y="186" text-anchor="middle" fill="#8b949e" font-size="11">text, reasoning, tools,</text>
+  <text x="527" y="202" text-anchor="middle" fill="#8b949e" font-size="11">usage, metadata, errors</text>
+  <text x="527" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">{ type: "delta" }</text>
+
+  <!-- box 4 -->
+  <rect x="652" y="110" width="170" height="120" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
+  <text x="737" y="140" text-anchor="middle" fill="#3fb950" font-size="15" font-weight="bold">4. Sentence buffer</text>
+  <text x="737" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">the smart part</text>
+  <text x="737" y="186" text-anchor="middle" fill="#8b949e" font-size="11">waits for a full sentence,</text>
+  <text x="737" y="202" text-anchor="middle" fill="#8b949e" font-size="11">strips markdown and emoji</text>
+  <text x="737" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">"The sky is blue."</text>
+
+  <!-- box 5 -->
+  <rect x="862" y="110" width="118" height="120" rx="10" fill="#161b22" stroke="#e3b341" stroke-width="2"/>
+  <text x="921" y="140" text-anchor="middle" fill="#e3b341" font-size="15" font-weight="bold">5. Done</text>
+  <text x="921" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">ready to use</text>
+  <text x="921" y="188" text-anchor="middle" fill="#8b949e" font-size="11">TTS voice</text>
+  <text x="921" y="204" text-anchor="middle" fill="#8b949e" font-size="11">live captions</text>
+  <text x="921" y="220" text-anchor="middle" fill="#8b949e" font-size="11">chat UI</text>
+
+  <!-- bottom note -->
+  <rect x="20" y="268" width="960" height="58" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="500" y="292" text-anchor="middle" fill="#e6edf3" font-size="13">Everything runs in one call: parse_stream(chunks) in Python, parseStream(chunks) in JavaScript.</text>
+  <text x="500" y="312" text-anchor="middle" fill="#8b949e" font-size="13">The provider is detected automatically, so you normally write zero configuration.</text>
+</svg>

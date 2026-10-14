@@ -1,0 +1,16 @@
+{
+  "name": "gemini_thinking",
+  "layer": "wire",
+  "provider": "auto",
+  "chunks": [
+    "data: {\"modelVersion\":\"gemini-2.0-flash\",\"candidates\":[{\"index\":0,\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"Let me think...\",\"thought\":true}]}}]}\n\n",
+    "data: {\"modelVersion\":\"gemini-2.0-flash\",\"candidates\":[{\"index\":0,\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"The answer is 42.\"}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":5,\"candidatesTokenCount\":8,\"totalTokenCount\":13}}\n\n"
+  ],
+  "expected_events": [
+    { "type": "reasoning_delta", "text": "Let me think..." },
+    { "type": "delta", "text": "The answer is 42." },
+    { "type": "metadata", "provider": "gemini", "finish_reason": "STOP", "model": "gemini-2.0-flash" },
+    { "type": "usage", "input_tokens": 5, "output_tokens": 8, "total_tokens": 13 },
+    { "type": "done" }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "max_flush_hard",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10, "max_buffer_size": 50 },
+  "input": {
+    "tokens": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ]
+  },
+  "expected_sentences": [
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "aaaaaaaaaaaaaaaaaaaaaaaa"
+  ]
+}

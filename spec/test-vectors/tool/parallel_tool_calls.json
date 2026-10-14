@@ -1,0 +1,23 @@
+{
+  "name": "parallel_tool_calls",
+  "layer": "tool",
+  "input": {
+    "slots": [
+      { "index": 0, "name_fragments": ["search"], "argument_fragments": ["{\"q\": \"ai\"}"] },
+      { "index": 1, "name_fragments": ["calc"], "argument_fragments": ["{\"expr\":", " \"1+2\"}"] }
+    ],
+    "end_signal": "done"
+  },
+  "expected": [
+    {
+      "type": "tool_call_complete",
+      "name": "search",
+      "arguments": { "q": "ai" }
+    },
+    {
+      "type": "tool_call_complete",
+      "name": "calc",
+      "arguments": { "expr": "1+2" }
+    }
+  ]
+}

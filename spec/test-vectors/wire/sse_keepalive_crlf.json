@@ -1,0 +1,17 @@
+{
+  "name": "sse_keepalive_crlf",
+  "layer": "wire",
+  "provider": "auto",
+  "chunks": [
+    ": keep-alive\r\n\r\n",
+    "data: {\"choices\":[{\"delta\":{\"content\":\"A\"}}]}\r\n",
+    "\r\n",
+    "data: {\"choices\":[{\"delta\":{\"content\":\"B.\"}}]}\r\n\r\n",
+    "data: [DONE]\r\n\r\n"
+  ],
+  "expected_events": [
+    { "type": "delta", "text": "A" },
+    { "type": "delta", "text": "B." },
+    { "type": "done" }
+  ]
+}

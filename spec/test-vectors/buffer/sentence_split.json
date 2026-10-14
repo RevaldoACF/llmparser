@@ -1,0 +1,13 @@
+{
+  "name": "sentence_split",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10 },
+  "input": {
+    "tokens": ["Hello there. How ", "are you doi", "ng today? Fine!", " I am good!"]
+  },
+  "expected_sentences": [
+    "Hello there.",
+    "How are you doing today?",
+    "Fine! I am good!"
+  ]
+}

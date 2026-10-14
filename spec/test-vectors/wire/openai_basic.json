@@ -1,0 +1,15 @@
+{
+  "name": "openai_basic",
+  "layer": "wire",
+  "provider": "auto",
+  "chunks": [
+    "data: {\"id\":\"chatcmpl-1\",\"object\":\"chat.completion.chunk\",\"model\":\"gpt-4o\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"Hello\"},\"finish_reason\":null}]}\n\n",
+    "data: {\"id\":\"chatcmpl-1\",\"object\":\"chat.completion.chunk\",\"model\":\"gpt-4o\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" world. How are\"},\"finish_reason\":null}]}\n\n",
+    "data: [DONE]\n\n"
+  ],
+  "expected_events": [
+    { "type": "delta", "text": "Hello" },
+    { "type": "delta", "text": " world. How are" },
+    { "type": "done" }
+  ]
+}

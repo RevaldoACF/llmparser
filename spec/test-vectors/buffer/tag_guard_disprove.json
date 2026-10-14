@@ -1,0 +1,12 @@
+{
+  "name": "tag_guard_disprove",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10 },
+  "input": {
+    "tokens": ["Two backticks `` here.", " More text follows here."]
+  },
+  "expected_sentences": [
+    "Two backticks here.",
+    "More text follows here."
+  ]
+}

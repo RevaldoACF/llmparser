@@ -1,0 +1,12 @@
+{
+  "name": "abbreviations",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10 },
+  "input": {
+    "tokens": ["Dr. Smith went to ", "Washington. He stayed. "]
+  },
+  "expected_sentences": [
+    "Dr. Smith went to Washington.",
+    "He stayed."
+  ]
+}

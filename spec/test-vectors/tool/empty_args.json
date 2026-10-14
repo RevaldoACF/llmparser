@@ -1,0 +1,14 @@
+{
+  "name": "empty_args",
+  "layer": "tool",
+  "input": {
+    "name_fragments": ["noop"],
+    "argument_fragments": [""],
+    "end_signal": "done"
+  },
+  "expected": {
+    "type": "tool_call_complete",
+    "name": "noop",
+    "arguments": {}
+  }
+}

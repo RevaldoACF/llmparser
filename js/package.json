@@ -1,0 +1,53 @@
+{
+  "name": "llmstream",
+  "version": "0.1.0",
+  "description": "Lightweight multi-provider LLM streaming parser with sentence buffering for Voice AI, tag guarding, and streaming tool-call assembly. Zero runtime dependencies.",
+  "keywords": [
+    "llm", "streaming", "parser", "sse", "tts", "voice", "sentence", "tool-calls"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react/useLLMStream.d.ts",
+      "import": "./dist/react/useLLMStream.js",
+      "require": "./dist/react/useLLMStream.cjs"
+    },
+    "./tool": {
+      "types": "./dist/toolParser.d.ts",
+      "import": "./dist/toolParser.js",
+      "require": "./dist/toolParser.cjs"
+    }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "react": "^18.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  }
+}

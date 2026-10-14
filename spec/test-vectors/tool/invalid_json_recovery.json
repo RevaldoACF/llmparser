@@ -1,0 +1,13 @@
+{
+  "name": "invalid_json_recovery",
+  "layer": "tool",
+  "input": {
+    "name_fragments": ["broken"],
+    "argument_fragments": ["{\"a\": 1,]"],
+    "end_signal": "done"
+  },
+  "expected": {
+    "type": "error",
+    "code": "tool_arguments_invalid"
+  }
+}

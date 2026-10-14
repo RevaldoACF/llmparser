@@ -1,0 +1,14 @@
+{
+  "name": "openai_chunk_split",
+  "layer": "wire",
+  "provider": "auto",
+  "chunks": [
+    "data: {\"choices\":[{\"delta\":{\"cont",
+    "ent\":\"Hi there\"}}]}\n\n",
+    "data: [DONE]\n\n"
+  ],
+  "expected_events": [
+    { "type": "delta", "text": "Hi there" },
+    { "type": "done" }
+  ]
+}

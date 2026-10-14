@@ -1,0 +1,13 @@
+{
+  "name": "markdown_strip",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10 },
+  "input": {
+    "tokens": ["This is **bold** and ", "*italic* text. See [docs](http://x.y) ", "for details. Bye."]
+  },
+  "expected_sentences": [
+    "This is bold and italic text.",
+    "See docs for details.",
+    "Bye."
+  ]
+}

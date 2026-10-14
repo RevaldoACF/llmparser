@@ -1,0 +1,18 @@
+{
+  "name": "malformed_chunks",
+  "layer": "wire",
+  "provider": "auto",
+  "on_error": "skip",
+  "chunks": [
+    "data: {\"choices\":[{\"delta\":{\"content\":\"Ok \"}}]}\n\n",
+    "data: {this is not json}\n\n",
+    "data: {\"choices\":[{\"delta\":{\"content\":\"fine.\"}}]}\n\n",
+    "data: [DONE]\n\n"
+  ],
+  "expected_events": [
+    { "type": "delta", "text": "Ok " },
+    { "type": "error", "code": "malformed_chunk" },
+    { "type": "delta", "text": "fine." },
+    { "type": "done" }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "tag_guard_custom",
+  "layer": "buffer",
+  "options": {
+    "min_chunk_size": 10,
+    "guard_tags_extra": ["<think>", "</think>"]
+  },
+  "input": {
+    "tokens": ["The answer is coming soon. <th", "ink>hi</think> Finished!"]
+  },
+  "expected_sentences": [
+    "The answer is coming soon.",
+    "<think>hi</think> Finished!"
+  ]
+}

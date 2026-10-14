@@ -1,0 +1,11 @@
+{
+  "name": "min_merge_short_sentences",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 40 },
+  "input": {
+    "tokens": ["Hi.", " I'm fine.", " Thanks!", " Great."]
+  },
+  "expected_sentences": [
+    "Hi. I'm fine. Thanks! Great."
+  ]
+}

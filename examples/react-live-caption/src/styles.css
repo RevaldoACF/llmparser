@@ -1,0 +1,173 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+.dim {
+  color: #8b949e;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.controls input[type="text"],
+.controls input:not([type]) {
+  flex: 1;
+  min-width: 180px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.95rem;
+}
+
+button {
+  background: #238636;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+button.stop {
+  background: #da3633;
+}
+
+.captions {
+  min-height: 220px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sentence {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+.partial {
+  margin: 0;
+  color: #8b949e;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 1.1em;
+  margin-left: 2px;
+  background: #58a6ff;
+  vertical-align: text-bottom;
+  animation: blink 0.9s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hint {
+  font-size: 0.95rem;
+}
+
+.status {
+  margin-left: auto;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #30363d;
+}
+
+.status-streaming {
+  color: #58a6ff;
+  border-color: #1f6feb66;
+}
+
+.status-done {
+  color: #3fb950;
+  border-color: #23863666;
+}
+
+.status-error {
+  color: #f85149;
+  border-color: #da363366;
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tools h2 {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
+.tool code {
+  background: #161b22;
+  border: 1px solid #30363d;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #79c0ff;
+}
+
+.error {
+  background: #21100f;
+  border: 1px solid #da363366;
+  color: #f85149;
+  border-radius: 6px;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+}
+
+footer {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}

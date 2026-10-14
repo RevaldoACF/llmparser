@@ -1,0 +1,16 @@
+{
+  "name": "groq_usage",
+  "layer": "wire",
+  "provider": "groq",
+  "chunks": [
+    "data: {\"id\":\"gen-1\",\"object\":\"chat.completion.chunk\",\"model\":\"llama-3.3-70b-versatile\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"Hi\"},\"finish_reason\":null}]}\n\n",
+    "data: {\"id\":\"gen-1\",\"object\":\"chat.completion.chunk\",\"model\":\"llama-3.3-70b-versatile\",\"choices\":[{\"index\":0,\"delta\":{},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":3,\"completion_tokens\":1,\"total_tokens\":4},\"x_groq\":{\"request_id\":\"req_abc\"}}\n\n",
+    "data: [DONE]\n\n"
+  ],
+  "expected_events": [
+    { "type": "delta", "text": "Hi" },
+    { "type": "metadata", "provider": "groq", "model": "llama-3.3-70b-versatile", "finish_reason": "stop" },
+    { "type": "usage", "input_tokens": 3, "output_tokens": 1, "total_tokens": 4 },
+    { "type": "done" }
+  ]
+}

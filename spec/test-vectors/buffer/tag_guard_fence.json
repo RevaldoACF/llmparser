@@ -1,0 +1,13 @@
+{
+  "name": "tag_guard_fence",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 10 },
+  "input": {
+    "tokens": ["Here is code: ```", "\nprint('hi')\n```", " Done. All good."]
+  },
+  "expected_sentences": [
+    "Here is code:",
+    "```\nprint('hi')\n```",
+    "Done. All good."
+  ]
+}

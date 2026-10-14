@@ -1,0 +1,12 @@
+{
+  "name": "code_block_drop",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 40, "code_block_mode": "drop" },
+  "input": {
+    "tokens": ["Run this: ```py", "print(1)``` End."]
+  },
+  "expected_sentences": [
+    "Run this:",
+    "End."
+  ]
+}

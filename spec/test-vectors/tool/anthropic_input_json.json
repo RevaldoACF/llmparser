@@ -1,0 +1,14 @@
+{
+  "name": "anthropic_input_json",
+  "layer": "tool",
+  "input": {
+    "name_fragments": ["get_weather"],
+    "argument_fragments": ["{\"city\": \"Pa", "ris\"}"],
+    "end_signal": "content_block_stop"
+  },
+  "expected": {
+    "type": "tool_call_complete",
+    "name": "get_weather",
+    "arguments": { "city": "Paris" }
+  }
+}

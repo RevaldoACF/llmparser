@@ -1,0 +1,14 @@
+{
+  "name": "openai_tool_fragments",
+  "layer": "tool",
+  "input": {
+    "name_fragments": ["get", "_weather"],
+    "argument_fragments": ["{\"loc", "ation\": \"San", " Francisco\"}"],
+    "end_signal": "finish_reason"
+  },
+  "expected": {
+    "type": "tool_call_complete",
+    "name": "get_weather",
+    "arguments": { "location": "San Francisco" }
+  }
+}

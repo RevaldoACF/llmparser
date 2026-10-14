@@ -1,0 +1,17 @@
+{
+  "name": "voice_ai_flow",
+  "layer": "e2e",
+  "provider": "auto",
+  "options": { "min_chunk_size": 20 },
+  "chunks": [
+    "data: {\"id\":\"c1\",\"object\":\"chat.completion.chunk\",\"model\":\"gpt-4o\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"Sure! Here is a fact. \"},\"finish_reason\":null}]}\n\n",
+    "data: {\"id\":\"c1\",\"object\":\"chat.completion.chunk\",\"model\":\"gpt-4o\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"The sky is blue. \"},\"finish_reason\":null}]}\n\n",
+    "data: {\"id\":\"c1\",\"object\":\"chat.completion.chunk\",\"model\":\"gpt-4o\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Water is wet. Bye!\"},\"finish_reason\":null}]}\n\n",
+    "data: [DONE]\n\n"
+  ],
+  "expected_sentences": [
+    "Sure! Here is a fact.",
+    "The sky is blue. Water is wet.",
+    "Bye!"
+  ]
+}

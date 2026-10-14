@@ -1,0 +1,12 @@
+{
+  "name": "unicode_emoji_cjk",
+  "layer": "buffer",
+  "options": { "min_chunk_size": 5 },
+  "input": {
+    "tokens": ["\ud83d\ude00", "Hello. ", "\u4f60\u597d\u3002", "\ud83d\udc4b World!"]
+  },
+  "expected_sentences": [
+    "Hello.",
+    "\u4f60\u597d\u3002 World!"
+  ]
+}
