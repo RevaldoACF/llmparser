@@ -88,7 +88,7 @@ Full Python guide: [python/README.md](python/README.md)
 ## Quick start: JavaScript
 
 ```js
-import { parseStream } from "llmstream";
+import { parseStream } from "@revaldoacf/llmstream";
 
 const res = await fetch(url, { method: "POST", body: JSON.stringify(body) });
 
@@ -110,7 +110,7 @@ Full JavaScript guide: [js/README.md](js/README.md)
 ## Quick start: React
 
 ```tsx
-import { useLLMStream } from "llmstream/react";
+import { useLLMStream } from "@revaldoacf/llmstream/react";
 
 function Chat() {
   const { sentences, partial, status, start, abort } = useLLMStream({

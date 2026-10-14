@@ -31,6 +31,9 @@ Thumbs.db
 .env
 *.log
 
+# PyPI credentials
+.pypirc
+
 # Internal planning & specs (not published)
 # NOTE: spec/test-vectors/ stays tracked — both Python & JS test suites load it at runtime
 plans/

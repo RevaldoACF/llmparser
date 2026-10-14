@@ -1,5 +1,5 @@
 {
-  "name": "llmstream",
+  "name": "@revaldoacf/llmstream",
   "version": "0.1.0",
   "description": "Lightweight multi-provider LLM streaming parser with sentence buffering for Voice AI, tag guarding, and streaming tool-call assembly. Zero runtime dependencies.",
   "keywords": [

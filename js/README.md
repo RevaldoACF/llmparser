@@ -7,8 +7,8 @@ Parse LLM streaming responses into **clean, complete sentences**, with auto prov
 ## Install
 
 ```bash
-npm install llmstream
-# React is an *optional* peer dependency, only needed for `llmstream/react`:
+npm install @revaldoacf/llmstream
+# React is an optional peer dependency, only needed for `@revaldoacf/llmstream/react`:
 npm install react
 ```
 
@@ -24,16 +24,16 @@ Dual-format build: **ESM + CJS** with bundled type declarations. `sideEffects: f
 
 | Subpath | Contents |
 |---|---|
-| `llmstream` | Everything: `parseStream`, `parseEvents`, `sentenceTransform`, `wrapStream`, buffer, tool parser, providers, decoders, errors |
-| `llmstream/react` | `useLLMStream` hook |
-| `llmstream/tool` | `StreamingToolParser`, `partialJson`, `ToolSlot` |
+| `@revaldoacf/llmstream` | Everything: `parseStream`, `parseEvents`, `sentenceTransform`, `wrapStream`, buffer, tool parser, providers, decoders, errors |
+| `@revaldoacf/llmstream/react` | `useLLMStream` hook |
+| `@revaldoacf/llmstream/tool` | `StreamingToolParser`, `partialJson`, `ToolSlot` |
 
 ## Quick start
 
 `parseStream` is the one-call entry point. It auto-detects the provider and wire format, and applies the `"voice"` buffer preset (sentence strategy + 500 ms idle flush + markdown/emoji stripping) by default.
 
 ```ts
-import { parseStream } from "llmstream";
+import { parseStream } from "@revaldoacf/llmstream";
 
 const res = await fetch("https://api.openai.com/v1/chat/completions", {
   method: "POST",
@@ -57,7 +57,7 @@ for await (const sentence of parseStream(res.body!)) {
 Wrap a generator that yields raw chunks so it yields sentences instead:
 
 ```ts
-import { wrapStream } from "llmstream";
+import { wrapStream } from "@revaldoacf/llmstream";
 
 const chat = wrapStream({ buffer: "ui" })((async function* (prompt: string) {
   const res = await fetch(url, { method: "POST", body: JSON.stringify({ prompt, stream: true }) });
@@ -72,7 +72,7 @@ for await (const sentence of chat("Hello!")) {
 ## Web Streams adapter (no loop at all)
 
 ```ts
-import { sentenceTransform } from "llmstream";
+import { sentenceTransform } from "@revaldoacf/llmstream";
 
 res.body!
   .pipeThrough(sentenceTransform({ provider: "openai", buffer: "ui" }))
@@ -86,7 +86,7 @@ res.body!
 Wraps `fetch` + parsing into a reactive hook with abort, a throttled (~30 fps) live `partial`, validated tool calls, and unmount cleanup:
 
 ```tsx
-import { useLLMStream } from "llmstream/react";
+import { useLLMStream } from "@revaldoacf/llmstream/react";
 
 function Chat() {
   const { sentences, partial, toolCalls, status, error, start, abort, reset } =
@@ -135,7 +135,7 @@ Starting a new stream while one is in flight aborts the previous one automatical
 `parseStream` yields **sentences** (string). Use `parseEvents` for the normalized `StreamEvent` stream (tool calls, usage, metadata, errors):
 
 ```ts
-import { parseEvents } from "llmstream";
+import { parseEvents } from "@revaldoacf/llmstream";
 
 for await (const ev of parseEvents(res.body!, { provider: "auto" })) {
   switch (ev.type) {
@@ -193,10 +193,10 @@ The pipeline assembles fragmented tool-call arguments **per slot (by index)** an
   <img src="../docs/images/tool-assembly.svg" alt="Tool calls, assembled in real time" width="880" />
 </p>
 
-Low-level access (subpath `llmstream/tool`):
+Low-level access (subpath `@revaldoacf/llmstream/tool`):
 
 ```ts
-import { StreamingToolParser, partialJson } from "llmstream/tool";
+import { StreamingToolParser, partialJson } from "@revaldoacf/llmstream/tool";
 
 const parser = new StreamingToolParser();
 
@@ -215,7 +215,7 @@ console.log(complete[0].name, complete[0].arguments);
 `buffer` accepts a preset (`"voice"`, `"ui"`, `"off"`/`false`) or a `BufferOptions` object:
 
 ```ts
-import { parseStream, PRESET_VOICE } from "llmstream";
+import { parseStream, PRESET_VOICE } from "@revaldoacf/llmstream";
 
 const opts = {
   minChunkSize: 40,          // don't flush sentences shorter than this (codepoints)
@@ -254,7 +254,7 @@ for await (const s of parseStream(res.body!, { buffer: opts })) { ... }
 `SentenceBuffer` is exported for standalone use:
 
 ```ts
-import { SentenceBuffer } from "llmstream";
+import { SentenceBuffer } from "@revaldoacf/llmstream";
 
 const buf = new SentenceBuffer(PRESET_VOICE);
 for (const s of buf.feed("The quick brown fox")) { ... }   // [] (not a sentence yet)
@@ -268,7 +268,7 @@ for (const s of buf.close()) console.log(s);               // trailing partial
 - `on_error: "skip"`: errors are emitted as `error` events (`code` in `malformed_chunk`, `tool_arguments_invalid`, `provider_error`) and the stream continues.
 
 ```ts
-import { LLMStreamError } from "llmstream";
+import { LLMStreamError } from "@revaldoacf/llmstream";
 
 try {
   for await (const ev of parseEvents(res.body!)) { ... }

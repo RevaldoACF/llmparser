@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Lightweight multi-provider LLM streaming parser with sentence buffering for Voice AI, tag guarding, and streaming tool-call assembly. Zero runtime dependencies."
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "llmstream contributors" }]
 keywords = ["llm", "streaming", "parser", "sse", "tts", "voice", "sentence", "tool-calls"]
 classifiers = [
@@ -23,7 +23,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
     "Typing :: Typed",
 ]
-dependencies = []  # zero runtime dependencies — stdlib only
+dependencies = []  # zero runtime dependencies, stdlib only
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "pytest-asyncio>=0.23"]
