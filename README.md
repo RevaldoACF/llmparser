@@ -20,14 +20,14 @@
 
 <br>
 
-When an LLM streams an answer, it sends tiny pieces of text, a few characters at a time. That is a problem for Voice AI. If you send `"The"` to the text to speech engine, then `"sky"`, then `"is"`, the voice sounds robotic and broken. You want to send `"The sky is blue."` as one piece, so it sounds like a real person talking.
+When an LLM streams an answer, it arrives in tiny pieces, a few characters at a time. Most consumers want complete, clean text: a chat UI, a live caption track, a search index, or a text to speech engine. Feeding `"The"`, then `"sky"`, then `"is"` to any of them produces choppy, broken output. You want to hand over `"The sky is blue."` as one complete piece.
 
-`llmstream` solves exactly that. It takes the raw stream from any provider, waits until a sentence is complete, cleans it up, and hands it to you. Your app just speaks or displays each sentence.
+`llmstream` solves exactly that. It takes the raw stream from any provider, waits until a sentence is complete, cleans it up, and hands it to you. Your app displays, stores, or speaks each sentence as it arrives.
 
 It also solves two more streaming problems that catch everyone:
 
 1. **Tool calls arrive in pieces.** The JSON arguments for a tool call come in tiny fragments. `llmstream` glues them together and only calls your function when the JSON is 100% valid.
-2. **Code blocks and tags get cut in half.** A fence like ` ``` ` can arrive split across two chunks. `llmstream` notices this and holds the text until the tag or block is whole, so your TTS never reads half a tag out loud.
+2. **Code blocks and tags get cut in half.** A fence like ` ``` ` can arrive split across two chunks. `llmstream` notices this and holds the text until the tag or block is whole, so consumers never receive a half tag or a broken fence.
 
 ## Why this library
 
@@ -49,8 +49,8 @@ Five steps, all inside one function call:
 1. **Raw stream.** Bytes or strings from the API, whatever shape they are in.
 2. **Wire decoder.** Understands Server Sent Events (SSE) and JSON Lines, even when a chunk is cut in the middle of a word or a UTF-8 character.
 3. **Provider adapter.** Turns the provider specific format into one universal event format (text, reasoning, tools, usage, errors). The provider is detected automatically.
-4. **Sentence buffer.** The smart part. It holds text until a sentence is complete, then cleans it for TTS (no markdown, no emoji).
-5. **Done.** You get clean sentences, ready to speak or display.
+4. **Sentence buffer.** The smart part. It holds text until a sentence is complete, then cleans it for display or speech (no markdown, no emoji).
+5. **Done.** You get clean sentences, ready to display, process, or speak.
 
 <a name="quick-start-python"></a>
 
@@ -62,23 +62,23 @@ from llmstream import parse_stream
 async def main():
     chunks = openai_stream(...)          # your raw chunk iterator
     async for sentence in parse_stream(chunks):
-        tts.speak(sentence)              # whole sentences, natural intonation
+        print(sentence)                  # complete sentences, ready to display or speak
 ```
 
-That is the entire integration. Provider detection, wire decoding, sentence buffering, and TTS cleaning all happen inside `parse_stream`.
+That is the entire integration. Provider detection, wire decoding, sentence buffering, and text cleaning all happen inside `parse_stream`.
 
 You can also use it as a decorator, so your own generator yields sentences:
 
 ```python
 from llmstream import stream_parser
 
-@stream_parser(buffer="voice")
+@stream_parser(buffer="ui")
 async def chat(prompt):
     async for chunk in raw_stream(prompt):
         yield chunk
 
 async for sentence in chat("Hello!"):
-    tts.speak(sentence)
+    print(sentence)
 ```
 
 Full Python guide: [python/README.md](python/README.md)
@@ -93,7 +93,7 @@ import { parseStream } from "llmstream";
 const res = await fetch(url, { method: "POST", body: JSON.stringify(body) });
 
 for await (const sentence of parseStream(res.body)) {
-  tts.speak(sentence);
+  console.log(sentence);                 // display, caption, or pass to TTS
 }
 ```
 
@@ -112,10 +112,9 @@ Full JavaScript guide: [js/README.md](js/README.md)
 ```tsx
 import { useLLMStream } from "llmstream/react";
 
-function VoiceChat() {
+function Chat() {
   const { sentences, partial, status, start, abort } = useLLMStream({
-    buffer: "voice",
-    onSentence: (s) => tts.speak(s),        // each complete sentence
+    onSentence: (s) => speak(s),            // optional: forward each sentence to TTS
   });
 
   return (
@@ -144,11 +143,11 @@ This is the heart of the library, drawn as a picture:
 In plain words:
 
 - **Tag guard.** If the buffer ends with something that looks like the start of a tag or a fence (for example ` `` ` or `<p`), it waits. That way you never get a half tag.
-- **Code blocks.** Once a code block opens, it is handled as a unit. You can pass it through raw, drop it, or replace it with the word "(code)" so TTS does not read code aloud.
+- **Code blocks.** Once a code block opens, it is handled as a unit. You can pass it through raw, drop it, or replace it with the word "(code)" so code is never shown or spoken verbatim.
 - **Complete sentence.** The scanner looks for a real end of sentence (`. ! ? … 。 ！`). It knows that `"Mr."` is not the end of a sentence, and that the dot in `"3.14"` is not a sentence break either.
-- **Not too short.** A sentence shorter than 40 codepoints is merged with the next one, so TTS does not speak tiny fragments.
-- **Not too long.** If the buffer reaches 400 codepoints without a sentence break, it is force flushed. Your voice never has to wait forever.
-- **Idle timeout.** If the stream pauses and you still have held text, it is spoken after 0.5 seconds, so speech starts on time.
+- **Not too short.** A sentence shorter than 40 codepoints is merged with the next one, so consumers do not receive tiny fragments.
+- **Not too long.** If the buffer reaches 400 codepoints without a sentence break, it is force flushed. Output never has to wait forever.
+- **Idle timeout.** With the voice preset, if the stream pauses and you still have held text, it is flushed after 0.5 seconds, so output starts on time.
 
 <a name="tool-calls-assembled-in-real-time"></a>
 
