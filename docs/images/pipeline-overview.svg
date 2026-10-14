@@ -1,64 +1,71 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="360" viewBox="0 0 1000 360" font-family="Segoe UI, Arial, sans-serif">
-  <rect width="1000" height="360" fill="#0d1117"/>
-  <text x="500" y="40" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="bold">How llmstream works</text>
-  <text x="500" y="64" text-anchor="middle" fill="#8b949e" font-size="14">Raw LLM stream in, clean complete sentences out</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="400" viewBox="0 0 1120 400" font-family="-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.08"/>
+    </filter>
+  </defs>
 
-  <!-- arrows (drawn first, boxes on top) -->
-  <g stroke="#30363d" stroke-width="2">
-    <line x1="192" y1="170" x2="228" y2="170"/>
-    <line x1="402" y1="170" x2="438" y2="170"/>
-    <line x1="612" y1="170" x2="648" y2="170"/>
-    <line x1="822" y1="170" x2="858" y2="170"/>
+  <rect width="1120" height="400" fill="#f6f8fa"/>
+  <rect x="16" y="12" width="1088" height="376" rx="16" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5" filter="url(#shadow)"/>
+
+  <text x="560" y="54" text-anchor="middle" fill="#1f2328" font-size="22" font-weight="bold">How llmstream works</text>
+  <text x="560" y="78" text-anchor="middle" fill="#57606a" font-size="14">Raw LLM stream in. Clean, complete sentences out.</text>
+
+  <!-- arrows between boxes -->
+  <g stroke="#8c959f" stroke-width="2">
+    <line x1="222" y1="205" x2="240" y2="205"/>
+    <line x1="432" y1="205" x2="450" y2="205"/>
+    <line x1="642" y1="205" x2="660" y2="205"/>
+    <line x1="852" y1="205" x2="870" y2="205"/>
   </g>
-  <g fill="#8b949e">
-    <polygon points="232,170 220,164 220,176"/>
-    <polygon points="442,170 430,164 430,176"/>
-    <polygon points="652,170 640,164 640,176"/>
-    <polygon points="862,170 850,164 850,176"/>
+  <g fill="#8c959f">
+    <polygon points="250,205 238,199 238,211"/>
+    <polygon points="460,205 448,199 448,211"/>
+    <polygon points="670,205 658,199 658,211"/>
+    <polygon points="880,205 868,199 868,211"/>
   </g>
 
-  <!-- box 1 -->
-  <rect x="20" y="110" width="172" height="120" rx="10" fill="#161b22" stroke="#f0883e" stroke-width="2"/>
-  <text x="106" y="140" text-anchor="middle" fill="#f0883e" font-size="15" font-weight="bold">1. Raw stream</text>
-  <text x="106" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">bytes from the API</text>
-  <text x="106" y="186" text-anchor="middle" fill="#8b949e" font-size="11">OpenAI, Anthropic,</text>
-  <text x="106" y="202" text-anchor="middle" fill="#8b949e" font-size="11">Gemini, Groq, Ollama</text>
-  <text x="106" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">data: { ... }</text>
+  <!-- box 1: raw stream -->
+  <rect x="40" y="120" width="180" height="170" rx="12" fill="#f6f8fa" stroke="#bc4c00" stroke-width="2"/>
+  <text x="130" y="152" text-anchor="middle" fill="#bc4c00" font-size="15" font-weight="bold">1. Raw stream</text>
+  <text x="130" y="182" text-anchor="middle" fill="#1f2328" font-size="12">bytes from the API</text>
+  <text x="130" y="202" text-anchor="middle" fill="#57606a" font-size="11">OpenAI, Anthropic, Gemini,</text>
+  <text x="130" y="218" text-anchor="middle" fill="#57606a" font-size="11">Groq, Ollama, OpenRouter</text>
+  <text x="130" y="262" text-anchor="middle" fill="#0550ae" font-size="11" font-family="SFMono-Regular, Consolas, Menlo, monospace">data: { ... }</text>
 
-  <!-- box 2 -->
-  <rect x="232" y="110" width="170" height="120" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
-  <text x="317" y="140" text-anchor="middle" fill="#58a6ff" font-size="15" font-weight="bold">2. Wire decoder</text>
-  <text x="317" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">SSE or JSON Lines</text>
-  <text x="317" y="186" text-anchor="middle" fill="#8b949e" font-size="11">handles chunks split</text>
-  <text x="317" y="202" text-anchor="middle" fill="#8b949e" font-size="11">in the middle of a word</text>
-  <text x="317" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">{ ... } valid JSON</text>
+  <!-- box 2: wire decoder -->
+  <rect x="250" y="120" width="180" height="170" rx="12" fill="#f6f8fa" stroke="#0969da" stroke-width="2"/>
+  <text x="340" y="152" text-anchor="middle" fill="#0969da" font-size="15" font-weight="bold">2. Wire decoder</text>
+  <text x="340" y="182" text-anchor="middle" fill="#1f2328" font-size="12">SSE or JSON Lines</text>
+  <text x="340" y="202" text-anchor="middle" fill="#57606a" font-size="11">handles chunks split</text>
+  <text x="340" y="218" text-anchor="middle" fill="#57606a" font-size="11">mid word or mid UTF-8</text>
+  <text x="340" y="262" text-anchor="middle" fill="#0550ae" font-size="11" font-family="SFMono-Regular, Consolas, Menlo, monospace">{ ... } valid JSON</text>
 
-  <!-- box 3 -->
-  <rect x="442" y="110" width="170" height="120" rx="10" fill="#161b22" stroke="#bc8cff" stroke-width="2"/>
-  <text x="527" y="140" text-anchor="middle" fill="#bc8cff" font-size="15" font-weight="bold">3. Provider adapter</text>
-  <text x="527" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">one event format</text>
-  <text x="527" y="186" text-anchor="middle" fill="#8b949e" font-size="11">text, reasoning, tools,</text>
-  <text x="527" y="202" text-anchor="middle" fill="#8b949e" font-size="11">usage, metadata, errors</text>
-  <text x="527" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">{ type: "delta" }</text>
+  <!-- box 3: provider adapter -->
+  <rect x="460" y="120" width="180" height="170" rx="12" fill="#f6f8fa" stroke="#8250df" stroke-width="2"/>
+  <text x="550" y="152" text-anchor="middle" fill="#8250df" font-size="15" font-weight="bold">3. Provider adapter</text>
+  <text x="550" y="182" text-anchor="middle" fill="#1f2328" font-size="12">one event format:</text>
+  <text x="550" y="202" text-anchor="middle" fill="#57606a" font-size="11">text, reasoning, tools,</text>
+  <text x="550" y="218" text-anchor="middle" fill="#57606a" font-size="11">usage, metadata, errors</text>
+  <text x="550" y="262" text-anchor="middle" fill="#0550ae" font-size="11" font-family="SFMono-Regular, Consolas, Menlo, monospace">{ type: "delta" }</text>
 
-  <!-- box 4 -->
-  <rect x="652" y="110" width="170" height="120" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
-  <text x="737" y="140" text-anchor="middle" fill="#3fb950" font-size="15" font-weight="bold">4. Sentence buffer</text>
-  <text x="737" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">the smart part</text>
-  <text x="737" y="186" text-anchor="middle" fill="#8b949e" font-size="11">waits for a full sentence,</text>
-  <text x="737" y="202" text-anchor="middle" fill="#8b949e" font-size="11">strips markdown and emoji</text>
-  <text x="737" y="220" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="Consolas, monospace">"The sky is blue."</text>
+  <!-- box 4: sentence buffer -->
+  <rect x="670" y="120" width="180" height="170" rx="12" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+  <text x="760" y="152" text-anchor="middle" fill="#1a7f37" font-size="15" font-weight="bold">4. Sentence buffer</text>
+  <text x="760" y="182" text-anchor="middle" fill="#1f2328" font-size="12">waits for a full sentence,</text>
+  <text x="760" y="202" text-anchor="middle" fill="#57606a" font-size="11">then cleans it: no</text>
+  <text x="760" y="218" text-anchor="middle" fill="#57606a" font-size="11">markdown, no emoji</text>
+  <text x="760" y="262" text-anchor="middle" fill="#0550ae" font-size="11" font-family="SFMono-Regular, Consolas, Menlo, monospace">"The sky is blue."</text>
 
-  <!-- box 5 -->
-  <rect x="862" y="110" width="118" height="120" rx="10" fill="#161b22" stroke="#e3b341" stroke-width="2"/>
-  <text x="921" y="140" text-anchor="middle" fill="#e3b341" font-size="15" font-weight="bold">5. Done</text>
-  <text x="921" y="164" text-anchor="middle" fill="#e6edf3" font-size="12">ready to use</text>
-  <text x="921" y="188" text-anchor="middle" fill="#8b949e" font-size="11">TTS voice</text>
-  <text x="921" y="204" text-anchor="middle" fill="#8b949e" font-size="11">live captions</text>
-  <text x="921" y="220" text-anchor="middle" fill="#8b949e" font-size="11">chat UI</text>
+  <!-- box 5: sentences out -->
+  <rect x="880" y="120" width="180" height="170" rx="12" fill="#f6f8fa" stroke="#9a6700" stroke-width="2"/>
+  <text x="970" y="152" text-anchor="middle" fill="#9a6700" font-size="15" font-weight="bold">5. Sentences out</text>
+  <text x="970" y="182" text-anchor="middle" fill="#1f2328" font-size="12">complete, clean text</text>
+  <text x="970" y="202" text-anchor="middle" fill="#57606a" font-size="11">for a chat UI, captions,</text>
+  <text x="970" y="218" text-anchor="middle" fill="#57606a" font-size="11">search, TTS, or storage</text>
 
   <!-- bottom note -->
-  <rect x="20" y="268" width="960" height="58" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-  <text x="500" y="292" text-anchor="middle" fill="#e6edf3" font-size="13">Everything runs in one call: parse_stream(chunks) in Python, parseStream(chunks) in JavaScript.</text>
-  <text x="500" y="312" text-anchor="middle" fill="#8b949e" font-size="13">The provider is detected automatically, so you normally write zero configuration.</text>
+  <rect x="40" y="320" width="1040" height="48" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+  <text x="560" y="341" text-anchor="middle" fill="#1f2328" font-size="13">Everything runs in one call: parse_stream() in Python, parseStream() in JavaScript.</text>
+  <text x="560" y="359" text-anchor="middle" fill="#57606a" font-size="13">The provider is detected automatically, so you normally write zero configuration.</text>
 </svg>

@@ -1,6 +1,6 @@
 # llmstream (Python)
 
-Parse LLM streaming responses into **clean, complete sentences** — multi-provider, zero dependencies, one call. Python 3.9+.
+Parse LLM streaming responses into **clean, complete sentences**, with auto provider detection, zero runtime dependencies, and a single call. Python 3.9+.
 
 **Part of the [llmstream](../README.md) monorepo** (Python + JS/TS, spec-first, shared test vectors).
 
@@ -13,9 +13,15 @@ pip install -e ".[dev]"       # + pytest / pytest-asyncio for the test suite
 ```
 
 > **Zero runtime dependencies.** The package imports only from the standard library.
-> You bring your own HTTP client (httpx, aiohttp, the provider SDK, `requests`…) and feed us the chunks.
+> You bring your own HTTP client (httpx, aiohttp, the provider SDK, `requests`) and feed it the chunks.
 
-## Quick start — Voice AI
+## How the pipeline works
+
+<p align="center">
+  <img src="../docs/images/pipeline-overview.svg" alt="How llmstream works" width="880" />
+</p>
+
+## Quick start
 
 `parse_stream` is the one-call entry point. It auto-detects the provider and wire format, and applies the `"voice"` buffer preset (sentence strategy + 500 ms idle flush + markdown/emoji stripping) by default.
 
@@ -25,7 +31,7 @@ import httpx
 from llmstream import parse_stream
 
 async def openai_stream(messages: list[dict]) -> "AsyncIterator[bytes]":
-    """Your raw chunk iterator — anything that yields bytes/str/dicts."""
+    """Your raw chunk iterator: anything that yields bytes/str/dicts."""
     async with httpx.AsyncClient() as client:
         async with client.stream(
             "POST",
@@ -38,12 +44,12 @@ async def openai_stream(messages: list[dict]) -> "AsyncIterator[bytes]":
 
 async def main():
     async for sentence in parse_stream(openai_stream([{"role": "user", "content": "Why is the sky blue?"}])):
-        tts.speak(sentence)          # each `sentence` is a complete, TTS-clean sentence
+        print(sentence)          # each sentence is complete and clean
 
 asyncio.run(main())
 ```
 
-That's the entire integration: **one import, one call, no configuration**.
+That is the entire integration: **one import, one call, no configuration**.
 
 ## The `@stream_parser` decorator
 
@@ -52,13 +58,13 @@ Wrap any generator that yields raw chunks so it yields sentences instead:
 ```python
 from llmstream import stream_parser
 
-@stream_parser(buffer="voice")          # or buffer="ui", "off", False, BufferOptions(...)
+@stream_parser(buffer="ui")            # or buffer="voice", "off", False, BufferOptions(...)
 async def chat(prompt: str):
     async for chunk in raw_openai_stream(prompt):   # bytes / str / pre-parsed dicts
         yield chunk
 
 async for sentence in chat("Hello!"):
-    tts.speak(sentence)
+    print(sentence)
 ```
 
 Works for **sync generators too** (the decorator detects `async def` vs `def`):
@@ -74,12 +80,16 @@ def chat_sync(prompt: str):
 
 Provider and wire format are auto-detected from the first parseable payload:
 
+<p align="center">
+  <img src="../docs/images/provider-detect.svg" alt="Provider auto-detection" width="880" />
+</p>
+
 | Provider | Detection signal |
 |---|---|
 | `openai` | `choices[].delta` or `object == "chat.completion.chunk"` |
 | `anthropic` | `type` field in Anthropic event set |
 | `gemini` | `candidates[]` payload |
-| `groq` | `x_groq` field (otherwise OpenAI-compatible — you can force it) |
+| `groq` | `x_groq` field (otherwise OpenAI-compatible, you can force it) |
 | `generic` | anything else (Ollama, OpenRouter, vLLM, any OpenAI-compatible endpoint) |
 
 Override when you know better:
@@ -97,7 +107,7 @@ parse_stream(chunks, stream_format="jsonl")
 
 ## Working with raw events
 
-`parse_stream` yields **sentences** (str). Use `parse_events` / `iter_events` to get the normalized `StreamEvent` stream — needed when you want tool calls, usage, or metadata:
+`parse_stream` yields **sentences** (str). Use `parse_events` / `iter_events` to get the normalized `StreamEvent` stream, needed when you want tool calls, usage, or metadata:
 
 ```python
 from llmstream import parse_events, iter_events
@@ -127,7 +137,7 @@ for ev in iter_events(lines_from_file):
 The sentence API is just `iter_sentences` on top of the same core:
 
 ```python
-for sentence in iter_sentences(chunks, buffer="voice"):
+for sentence in iter_sentences(chunks, buffer="ui"):
     print(sentence)
 ```
 
@@ -144,9 +154,13 @@ for sentence in iter_sentences(chunks, buffer="voice"):
 
 ## Tool calls
 
-The pipeline assembles fragmented tool-call arguments **per slot (by index)** and emits `tool_call_complete` **only after strict JSON validation** — empty arguments become `{}`, invalid JSON produces an `error` event with `code="tool_arguments_invalid"` instead of a broken call.
+The pipeline assembles fragmented tool-call arguments **per slot (by index)** and emits `tool_call_complete` **only after strict JSON validation**. Empty arguments become `{}`. Invalid JSON produces an `error` event with `code="tool_arguments_invalid"` instead of a broken call.
 
-If you only want sentences, tool fragments are transparently consumed. If you want the calls, listen on `parse_events` (above) — no extra wiring needed.
+<p align="center">
+  <img src="../docs/images/tool-assembly.svg" alt="Tool calls, assembled in real time" width="880" />
+</p>
+
+If you only want sentences, tool fragments are transparently consumed. If you want the calls, listen on `parse_events` (above), no extra wiring needed.
 
 For low-level control (or to power your own UI), use the parser directly:
 
@@ -156,18 +170,18 @@ from llmstream import StreamingToolParser, partial_json
 parser = StreamingToolParser()
 
 def on_progress(index, partial: dict | None):
-    # Live preview of the still-incomplete arguments (display only — never valid yet)
-    print("assembling…", partial)
+    # Live preview of the still-incomplete arguments (display only, never valid yet)
+    print("assembling...", partial)
 
 for ev in events:
     if ev.type == "tool_call_delta":
         parser.on_tool_call_delta(ev, on_progress=on_progress)
-    # …at end-of-stream (or on the provider's per-tool end signal):
+    # ...at end-of-stream (or on the provider's per-tool end signal):
     for done in parser.finalize():            # indices=None -> all slots, ascending
         print(done.name, done.arguments)
 ```
 
-`partial_json('{"a": 1, "b": ')` → `{"a": 1, "b": null}` — a best-effort, **display-only** completion that never gates dispatch.
+`partial_json('{"a": 1, "b": ')` becomes `{"a": 1, "b": null}`: a best-effort, **display-only** completion that never gates dispatch.
 
 ## Buffer options
 
@@ -183,11 +197,11 @@ opts = BufferOptions(
     strategy="sentence",      # sentence | clause | fixed | "regex:<pattern>"
     sentence_enders=". ! ? … 。 ！",   # NOTE: spaces are separators, not boundary chars
     soft_boundary=", ; : —",
-    strip_markdown=True,      # headings, lists, links (label kept), emphasis…
-    strip_emoji=True,         # emoji + variation selectors stripped for TTS
+    strip_markdown=True,      # headings, lists, links (label kept), emphasis
+    strip_emoji=True,         # emoji + variation selectors stripped
     collapse_whitespace=True,
     guard_tags=["```", "~~~", "`"],
-    guard_tags_extra=["<pause>", "[laugh]"],  # your custom TTS control tags
+    guard_tags_extra=["<pause>", "[laugh]"],  # your own control tags
     code_block_mode="passthrough",  # passthrough | drop | sanitize ("(code)")
     additional_abbrevs=["vs", "etc", "approx"],
     on_error="raise",         # raise | skip
@@ -199,10 +213,14 @@ async for sentence in parse_stream(chunks, buffer=opts):
 **How the buffer works** (full normative spec: [../spec/BUFFER-ALGORITHM.md](../spec/BUFFER-ALGORITHM.md)):
 
 1. Text accumulates in a buffer. A sentence boundary is a valid ender (`.!?…。！`) **not** part of an abbreviation (Rule A) **not** a decimal/token dot (Rule U), followed by whitespace/EOF/closing punctuation (Rule F).
-2. A flushed region must be ≥ `min_chunk_size` codepoints, otherwise it's held for the next boundary.
-3. If the buffer reaches `max_buffer_size` with no valid boundary, it's force-flushed (cut at the limit).
-4. **Tag guard**: if the buffer ends in a proper prefix of a guarded tag (`` ` ``, `$$`, a fence, `<pause>`…), the text is withheld until the tag completes — so TTS never reads half a tag or half a code fence.
-5. **Idle timeout** (async only): if the stream pauses with text still held, it's flushed so speech latency stays low.
+2. A flushed region must be at least `min_chunk_size` codepoints, otherwise it is held for the next boundary.
+3. If the buffer reaches `max_buffer_size` with no valid boundary, it is force-flushed (cut at the limit).
+4. **Tag guard**: if the buffer ends in a proper prefix of a guarded tag (`` ` ``, `$$`, a fence, `<pause>`...), the text is withheld until the tag completes, so consumers never see a half tag or half a code fence.
+5. **Idle timeout** (async only): if the stream pauses with text still held, it is flushed so output latency stays low.
+
+<p align="center">
+  <img src="../docs/images/sentence-buffer.svg" alt="The sentence buffer, step by step" width="880" />
+</p>
 
 ### `SentenceBuffer` standalone
 
@@ -221,7 +239,7 @@ for s in buf.close():
 ## Error handling
 
 - `on_error="raise"` (default): malformed chunks raise `ProtocolError`; bad tool JSON raises `ToolArgumentsError`; provider-level errors raise `ProviderError`. All derive from `LLMStreamError`.
-- `on_error="skip"`: errors are emitted as `error` events (`code` ∈ `malformed_chunk`, `tool_arguments_invalid`, `provider_error`) and the stream continues.
+- `on_error="skip"`: errors are emitted as `error` events (`code` in `malformed_chunk`, `tool_arguments_invalid`, `provider_error`) and the stream continues.
 
 ```python
 from llmstream import LLMStreamError
@@ -238,7 +256,7 @@ except LLMStreamError as e:
 ```python
 from llmstream import Pipeline
 
-p = Pipeline(provider="auto", buffer="voice", on_error="skip")
+p = Pipeline(provider="auto", buffer="ui", on_error="skip")
 for sentence in p.sentences(chunks):   # sync or async input
     ...
 for ev in p.events(chunks):
@@ -252,7 +270,7 @@ cd python
 python -m pytest tests/ -q        # 54 tests: shared vectors + unit tests
 ```
 
-The vector tests load `../spec/test-vectors/` — the **same** vectors the JS suite runs, which is how cross-language parity is enforced.
+The vector tests load `../spec/test-vectors/`, the **same** vectors the JS suite runs. That is how cross-language parity is enforced.
 
 ## Module map
 

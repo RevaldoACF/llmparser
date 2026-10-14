@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/banner.svg" alt="LLMParsor" width="760" />
+  <img src="docs/images/banner.svg" alt="llmstream" width="760" />
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@ It also solves two more streaming problems that catch everyone:
 |---|---|
 | **It is tiny.** | Zero runtime dependencies in Python. Zero runtime dependencies in JavaScript. It only uses what your language already has. |
 | **It is easy.** | One import, one function call. No config, no setup. It even figures out which provider you are using by itself. |
-| **It works with almost every provider.** | OpenAI, Anthropic, Google Gemini, Groq, and a generic adapter for Ollama, OpenRouter, VLLM, or any OpenAI compatible API. |
+| **It works with almost every provider.** | OpenAI, Anthropic, Google Gemini, Groq, and a generic adapter for Ollama, OpenRouter, vLLM, or any OpenAI compatible API. |
 | **Python and JavaScript behave identically.** | Both run the same test vectors. If they ever disagree, that is a bug we fix. |
 
 ## How it works
@@ -101,7 +101,7 @@ It accepts a `ReadableStream`, an async iterable, or a plain iterable. The JavaS
 
 - `wrapStream` : the JS version of the decorator.
 - `sentenceTransform` : a `TransformStream` you can pipe a response straight into.
-- `useLLMStream` : a React hook with live captions, speech, tool calls, and a stop button.
+- `useLLMStream` : a React hook with live captions, optional speech, tool calls, and a stop button.
 
 Full JavaScript guide: [js/README.md](js/README.md)
 
@@ -224,25 +224,6 @@ Two policies, your choice:
 - `on_error="skip"`: a bad chunk becomes an `error` event and the stream continues.
 
 Error codes are stable: `malformed_chunk`, `tool_arguments_invalid`, `provider_error`.
-
-## Repository layout
-
-```
-llmstream/
-├── README.md                  <- you are here
-├── logo.svg                   <- the banner above
-├── docs/images/               <- the flowchart pictures in this file
-├── spec/                      <- the detailed, language agnostic specification
-│   ├── SPEC.md                <- event model, defaults, presets, error policy
-│   ├── BUFFER-ALGORITHM.md    <- exact buffer rules, edge cases
-│   ├── TOOL-PARSER-ALGORITHM.md <- exact tool assembly rules
-│   ├── PROVIDER-PROTOCOLS.md  <- wire formats per provider
-│   └── test-vectors/          <- shared JSON tests, 25 files
-├── python/                    <- the Python package (54 tests, all passing)
-├── js/                        <- the TypeScript package (53 tests, all passing)
-├── examples/                  <- runnable examples, no API key needed
-└── plans/                     <- architecture plan with flowcharts
-```
 
 ## Testing and parity
 
