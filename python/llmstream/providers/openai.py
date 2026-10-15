@@ -30,7 +30,12 @@ class OpenAIAdapter(ProviderAdapter):
                 content = delta.get("content")
                 if isinstance(content, str) and content:
                     events.append(self._delta(content))
+                # Some OpenAI-compatible proxies (e.g. one-api) emit the
+                # thinking text under "reasoning" instead of the standard
+                # "reasoning_content"; accept both.
                 reasoning = delta.get("reasoning_content")
+                if not (isinstance(reasoning, str) and reasoning):
+                    reasoning = delta.get("reasoning")
                 if isinstance(reasoning, str) and reasoning:
                     events.append(self._reasoning(reasoning))
                 tool_calls = delta.get("tool_calls")

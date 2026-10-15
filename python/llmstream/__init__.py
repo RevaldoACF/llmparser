@@ -17,8 +17,10 @@ from .pipeline import (
     Pipeline,
     iter_events,
     iter_sentences,
+    iter_tokens,
     parse_events,
     parse_stream,
+    parse_tokens,
     stream_parser,
 )
 from .providers import (
@@ -34,9 +36,13 @@ from .providers import (
 )
 from .tool_parser import StreamingToolParser, ToolSlot, partial_json
 from .types import (
+    PRESET_OFF,
+    PRESET_UI,
+    PRESET_VOICE,
     BufferOptions,
     StreamEvent,
     ToolCall,
+    resolve_buffer,
 )
 
 __version__ = "0.1.0"
@@ -47,12 +53,18 @@ __all__ = [
     "iter_sentences",
     "parse_events",
     "iter_events",
+    "parse_tokens",
+    "iter_tokens",
     "stream_parser",
     "Pipeline",
     # types
     "StreamEvent",
     "BufferOptions",
     "ToolCall",
+    "PRESET_VOICE",
+    "PRESET_UI",
+    "PRESET_OFF",
+    "resolve_buffer",
     # buffer
     "SentenceBuffer",
     "sanitize_for_tts",

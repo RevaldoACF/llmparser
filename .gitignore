@@ -1,5 +1,6 @@
 # Python
 __pycache__/
+python/live_test/
 *.py[cod]
 *.egg-info/
 .eggs/

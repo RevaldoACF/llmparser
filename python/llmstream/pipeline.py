@@ -269,6 +269,69 @@ async def parse_events(
             yield ev
 
 
+def iter_tokens(
+    chunks: Any,
+    *,
+    provider: str = "auto",
+    stream_format: str = "auto",
+    on_error: str = "raise",
+    text_path: Optional[str] = None,
+    tool_path: Optional[str] = None,
+) -> Iterator[str]:
+    """Yields raw delta text as it arrives, no buffering."""
+    core = ParserCore(provider, stream_format, on_error, text_path, tool_path)
+    for chunk in chunks:
+        for ev in core.feed(chunk):
+            if ev.type == "delta":
+                yield ev.text
+    for ev in core.close():
+        if ev.type == "delta":
+            yield ev.text
+
+
+async def _parse_tokens_async(
+    chunks: Any,
+    provider: str,
+    stream_format: str,
+    on_error: str,
+    text_path: Optional[str],
+    tool_path: Optional[str],
+):
+    core = ParserCore(provider, stream_format, on_error, text_path, tool_path)
+    aiter = chunks.__aiter__()
+    while True:
+        try:
+            chunk = await aiter.__anext__()
+        except StopAsyncIteration:
+            break
+        for ev in core.feed(chunk):
+            if ev.type == "delta":
+                yield ev.text
+    for ev in core.close():
+        if ev.type == "delta":
+            yield ev.text
+
+
+def parse_tokens(
+    chunks: Any,
+    *,
+    provider: str = "auto",
+    stream_format: str = "auto",
+    on_error: str = "raise",
+    text_path: Optional[str] = None,
+    tool_path: Optional[str] = None,
+):
+    """Raw token stream, no sentence buffering. Async input gives an async iterator."""
+    if _is_async_iter(chunks):
+        return _parse_tokens_async(
+            chunks, provider, stream_format, on_error, text_path, tool_path
+        )
+    return iter_tokens(
+        chunks, provider=provider, stream_format=stream_format,
+        on_error=on_error, text_path=text_path, tool_path=tool_path,
+    )
+
+
 def parse_stream(
     chunks: Any,
     *,

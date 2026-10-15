@@ -216,6 +216,27 @@ async function* sourceIterator(
 
 // Event iterator
 
+export async function* parseTokens(
+  chunks: ChunkSource,
+  opts: PipelineOptions = {},
+): AsyncGenerator<string, void, unknown> {
+  const core = new ParserCore(
+    opts.provider ?? "auto",
+    opts.streamFormat ?? "auto",
+    opts.on_error ?? "raise",
+    opts.textPath,
+    opts.toolPath,
+  );
+  for await (const chunk of sourceIterator(chunks)) {
+    for (const ev of core.feed(chunk)) {
+      if (ev.type === "delta" && ev.text) yield ev.text;
+    }
+  }
+  for (const ev of core.close()) {
+    if (ev.type === "delta" && ev.text) yield ev.text;
+  }
+}
+
 /** chunks → AsyncIterable<StreamEvent> (includes final `done`). */
 export async function* parseEvents(
   chunks: ChunkSource,

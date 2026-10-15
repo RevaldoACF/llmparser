@@ -2,6 +2,7 @@
 export {
   parseStream,
   parseEvents,
+  parseTokens,
   sentenceTransform,
   wrapStream,
   ParserCore,

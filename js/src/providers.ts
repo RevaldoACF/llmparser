@@ -58,8 +58,14 @@ export class OpenAIAdapter implements ProviderAdapter {
       if (isObj(c0)) {
         const d = isObj(c0.delta) ? c0.delta : {};
         if (isStr(d.content) && d.content) events.push(delta(d.content));
-        if (isStr(d.reasoning_content) && d.reasoning_content)
-          events.push(reasoning(d.reasoning_content));
+        // Some OpenAI-compatible proxies (e.g. one-api) emit the thinking
+        // text under "reasoning" instead of the standard "reasoning_content";
+        // accept both.
+        const reasoningText =
+          isStr(d.reasoning_content) && d.reasoning_content ? d.reasoning_content
+          : isStr(d.reasoning) && d.reasoning ? d.reasoning
+          : null;
+        if (reasoningText) events.push(reasoning(reasoningText));
         if (Array.isArray(d.tool_calls)) {
           for (const tc of d.tool_calls) {
             if (!isObj(tc)) continue;
